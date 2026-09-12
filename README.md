@@ -2,15 +2,14 @@
   <img src="public/x-banner.jpg" alt="霓虹環道 Neon Circuit" width="100%">
 </p>
 
-<p align="center">
-  🎮 <a href="https://light-daisy-jade-bloom.grok.me"><strong>立即遊玩 · Play Now</strong></a>
-</p>
-
 <h1 align="center">霓虹環道 · Neon Circuit</h1>
 
 <p align="center">
   原創街機風格 3D 生涯賽車<br>
   Original arcade 3D career racer in the browser
+</p>
+<p align="center">
+  🎮 <a href="https://light-daisy-jade-bloom.grok.me"><strong>立即遊玩 · Play Now</strong></a>
 </p>
 
 <p align="center">
