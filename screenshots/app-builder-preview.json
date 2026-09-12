@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "霓虹環道 Neon Circuit",
+      "hasCanvas": false,
+      "bodyTextLen": 53,
+      "bodyTextHash": "b5dd1b7ae96ae817ffccaa3e0ce121d0407558bbc5c384128e166ec866054398",
+      "bodyTextPrefix": "ARCADE CAREER 霓虹環道 NEON CIRCUIT 第一章 夜城入場券 新遊戲 操作說明 設定",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "霓虹環道 Neon Circuit",
+      "hasCanvas": false,
+      "bodyTextLen": 53,
+      "bodyTextHash": "b5dd1b7ae96ae817ffccaa3e0ce121d0407558bbc5c384128e166ec866054398",
+      "bodyTextPrefix": "ARCADE CAREER 霓虹環道 NEON CIRCUIT 第一章 夜城入場券 新遊戲 操作說明 設定",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-preview.json"
+}
