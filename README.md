@@ -56,8 +56,8 @@ Start in the Skylark hatch, race a field of 8, cash prizes, unlock stars, buy an
 需要 [Node.js](https://nodejs.org/) 18 以上。
 
 ```bash
-git clone https://github.com/richie7p/light-daisy-jade-bloom.git
-cd light-daisy-jade-bloom
+git clone https://github.com/richie7p/neon-circuit.git
+cd neon-circuit
 npm install
 npm run dev
 ```
