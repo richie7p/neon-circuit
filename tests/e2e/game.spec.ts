@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 
 test("new career, WebGL race, real input and pause", async ({ page }, info) => {
+  test.setTimeout(120000);
   const errors: string[] = [];
   page.on("pageerror", error => errors.push(error.message));
   await page.goto("/");
@@ -15,6 +16,8 @@ test("new career, WebGL race, real input and pause", async ({ page }, info) => {
   }
   await expect(page.locator("canvas").first()).toBeVisible();
   await expect(page.getByText("KM/H", { exact: true })).toBeVisible();
+  // Software WebGL runs the real countdown slowly; wait for race readiness before testing input.
+  await expect(page.getByText("倒數結束前無法起步", { exact: true })).not.toBeVisible({ timeout: 60000 });
   await page.keyboard.down("w");
   await expect.poll(() => page.evaluate(() => window.__controlsTest?.getSpeed() ?? 0), { timeout: 20000 }).toBeGreaterThan(1);
   await page.keyboard.up("w");

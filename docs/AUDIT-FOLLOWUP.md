@@ -21,6 +21,8 @@ a nonexistent file as saved. Preview geometry/material/environment cleanup is te
 Local result: 197 script scaffold + 32 app-data/auth tests; 19 domain tests; 4 E2E
 cases; typecheck, lint and official production build pass. Chromium uses software
 WebGL in automation; that verifies renderer functionality, not physical GPU performance.
+The browser test waits for the actual starting countdown to finish before measuring
+acceleration; software-rendered frames can advance game time slower than wall time.
 
 ## Validation and reproduction
 
