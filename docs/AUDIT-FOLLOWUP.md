@@ -68,3 +68,7 @@ external Grok extension can be blocked by its cross-origin response; it is retai
 and is recorded as an external integration warning. Application uncaught errors are
 asserted by the browser suite. Physical audio listening and long play sessions remain
 external verification tasks.
+
+## Content and function acceptance update
+
+See [the 2026-10-04 acceptance record](CONTENT-FUNCTION-ACCEPTANCE.md) for the additional content review, fixes, regression cases and limits. Earlier counts above describe the audit baseline.

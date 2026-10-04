@@ -56,7 +56,7 @@ Start in the Skylark hatch, race a field of 8, cash prizes, unlock stars, buy an
 
 ## 啟動
 
-需要 [Node.js](https://nodejs.org/) 18 以上。
+需要 [Node.js](https://nodejs.org/) 22.23.2 或較新的受支援版本（目前套件與驗收使用 22.23.2）。
 
 ```bash
 git clone https://github.com/richie7p/neon-circuit.git
