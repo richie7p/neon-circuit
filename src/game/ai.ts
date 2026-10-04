@@ -51,7 +51,7 @@ export function thinkAI(
   const aimX = target.x + target.rx * car.aiOff;
   const aimZ = target.z + target.rz * car.aiOff;
   const desiredYaw = Math.atan2(-(aimX - car.x), -(aimZ - car.z));
-  let err = wrapAngle(desiredYaw - car.yaw);
+  const err = wrapAngle(desiredYaw - car.yaw);
 
   let kappa = 0;
   for (let d = 8; d <= 38; d += 6) {

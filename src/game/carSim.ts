@@ -333,7 +333,7 @@ export function collideCars(a: SimCar, b: SimCar) {
   return true;
 }
 
-export function progressKey(car: SimCar, track: BuiltTrack, totalLaps: number): number {
+export function progressKey(car: SimCar, track: BuiltTrack, _totalLaps: number): number {
   if (car.finished && car.finishTime != null) {
     return 1e9 - car.finishTime;
   }

@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { applyPaint, createCarMesh, createShowroomEnv, spinWheels } from "./carMesh";
+import { createCarMesh, createShowroomEnv, spinWheels } from "./carMesh";
 import { Input } from "./input";
 import { LEVEL_MAP } from "./data/levels";
 import { GameAudio } from "./audio";
@@ -13,7 +13,7 @@ import {
   type RaceSession,
 } from "./simRace";
 import { skyFog, buildWorld, type WorldBuilt } from "./world";
-import type { CarStyle, HudSnap, LevelId, Paint, SaveData } from "./types";
+import type { CarStyle, HudSnap, LevelId, SaveData } from "./types";
 
 export type EngineHooks = {
   onHud: (h: HudSnap) => void;
@@ -316,21 +316,20 @@ export class RaceEngine {
   }
 
   private exposeQa() {
-    const self = this;
     window.__controlsTest = {
-      getYaw: () => self.player().yaw,
-      getSpeed: () => self.player().speed,
+      getYaw: () => this.player().yaw,
+      getSpeed: () => this.player().speed,
       setSteer: (v: number) => {
-        self.input.steerOverride = v;
+        this.input.steerOverride = v;
       },
-      setKeys: (codes: string[]) => self.input.setKeys(codes),
+      setKeys: (codes: string[]) => this.input.setKeys(codes),
     };
     window.__qa = {
       getRace: () => ({
-        time: self.session.time,
-        started: self.session.started,
-        over: self.session.over,
-        cars: self.session.cars.map((c) => ({
+        time: this.session.time,
+        started: this.session.started,
+        over: this.session.over,
+        cars: this.session.cars.map((c) => ({
           name: c.name,
           lap: c.laps,
           cp: c.nextCp,
@@ -343,82 +342,22 @@ export class RaceEngine {
         })),
       }),
       skipCountdown: () => {
-        self.session.countdown = 0;
-        self.session.started = true;
-        self.session.goFlash = 0.4;
+        this.session.countdown = 0;
+        this.session.started = true;
+        this.session.goFlash = 0.4;
       },
       finishAt: (place: number) => {
-        forceFinish(self.session, place);
-        if (!self.finishedSent) {
-          self.finishedSent = true;
-          self.hooks.onFinish(buildLiveResult(self.session));
+        forceFinish(this.session, place);
+        if (!this.finishedSent) {
+          this.finishedSent = true;
+          this.hooks.onFinish(buildLiveResult(this.session));
         }
       },
       resetPlayer: () => {
-        resetCar(self.player(), self.session.track, true);
+        resetCar(this.player(), this.session.track, true);
       },
     };
   }
-}
-
-export function previewCar(canvas: HTMLCanvasElement, style: CarStyle, paint: Paint) {
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 1.6));
-  renderer.setSize(canvas.clientWidth || 320, canvas.clientHeight || 200, false);
-  renderer.outputColorSpace = THREE.SRGBColorSpace;
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.15;
-  const scene = new THREE.Scene();
-  scene.environment = createShowroomEnv(renderer);
-  scene.environmentIntensity = 0.9;
-  scene.add(new THREE.HemisphereLight(0xd8ecff, 0x1a1c22, 0.7));
-  const key = new THREE.DirectionalLight(0xffffff, 1.35);
-  key.position.set(3.2, 5.5, 4.5);
-  scene.add(key);
-  const rim = new THREE.DirectionalLight(0x7ad7d0, 0.55);
-  rim.position.set(-4, 2.4, -3);
-  scene.add(rim);
-  const fill = new THREE.DirectionalLight(0xffe6c8, 0.35);
-  fill.position.set(-2, 3, 5);
-  scene.add(fill);
-  const floor = new THREE.Mesh(
-    new THREE.CircleGeometry(5.5, 36),
-    new THREE.MeshStandardMaterial({ color: 0x141820, metalness: 0.35, roughness: 0.45 }),
-  );
-  floor.rotation.x = -Math.PI / 2;
-  scene.add(floor);
-  const mesh = createCarMesh(style, paint);
-  scene.add(mesh);
-  const cam = new THREE.PerspectiveCamera(36, 1.6, 0.1, 50);
-  cam.position.set(3.55, 1.22, 4.35);
-  cam.lookAt(0, 0.42, -0.15);
-  let raf = 0;
-  let live = true;
-  const loop = () => {
-    if (!live) return;
-    raf = requestAnimationFrame(loop);
-    mesh.rotation.y += 0.008;
-    renderer.render(scene, cam);
-  };
-  loop();
-  return {
-    setPaint(p: Paint) {
-      applyPaint(mesh, p);
-    },
-    resize() {
-      const w = canvas.clientWidth || 320;
-      const h = canvas.clientHeight || 200;
-      cam.aspect = w / Math.max(1, h);
-      cam.updateProjectionMatrix();
-      renderer.setSize(w, h, false);
-    },
-    dispose() {
-      live = false;
-      cancelAnimationFrame(raf);
-      scene.environment?.dispose();
-      renderer.dispose();
-    },
-  };
 }
 
 declare global {

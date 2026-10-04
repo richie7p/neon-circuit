@@ -96,7 +96,7 @@ export function PreRaceScreen() {
           <p className="font-display text-xs tracking-[0.28em] text-primary">GRID BRIEFING</p>
           <h2 className="mt-1 font-display text-3xl font-semibold">{lv.name}</h2>
           <p className="text-sm text-fg/80">
-            {lv.subtitle}　獎金基準 {moneyText(lv.prize)}
+            {lv.subtitle} 獎金基準 {moneyText(lv.prize)}
           </p>
         </div>
         <div className="grid gap-3 md:grid-cols-2">
@@ -115,7 +115,7 @@ export function PreRaceScreen() {
             </div>
             <div className="p-4 text-sm">
               <p>
-                出戰：{def.name}　{def.cls}　性能 {stats.score}
+                出戰：{def.name} {def.cls} 性能 {stats.score}
               </p>
               <div className="mt-3 flex flex-wrap gap-2">
                 {owned.length > 1 ? (
@@ -175,7 +175,7 @@ export function ResultsScreen() {
           {result.finished ? `第 ${result.place} 名` : "未完賽"}
         </p>
         <p className="mt-1 text-sm text-muted">
-          總時間 {fmt(result.totalTime)}　最佳圈 {result.bestLap != null ? fmt(result.bestLap) : "--"}
+          總時間 {fmt(result.totalTime)} 最佳圈 {result.bestLap != null ? fmt(result.bestLap) : "--"}
         </p>
         <div className="mt-4 panel-solid rounded-xl p-4">
           <p className="font-display text-sm text-accent">星星</p>
@@ -216,7 +216,7 @@ export function ResultsScreen() {
             {result.standings.map((s) => (
               <li key={s.place} className={s.isPlayer ? "text-primary" : ""}>
                 {s.place}. {s.name}
-                {s.finished && s.time != null ? `　${fmt(s.time)}` : "　DNF"}
+                {s.finished && s.time != null ? ` ${fmt(s.time)}` : " DNF"}
               </li>
             ))}
           </ol>

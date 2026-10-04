@@ -49,8 +49,7 @@ export function RaceView({ audio }: { audio: GameAudio }) {
       engine?.dispose();
       engineRef.current = null;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [levelId]);
+  }, [levelId, audio, save, finishRace]);
 
   const bindTouch = (partial: Partial<typeof touch.current>, on: boolean) => {
     Object.assign(touch.current, on ? partial : zeroTouch(partial));

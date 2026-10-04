@@ -101,7 +101,7 @@ export function buildTrack(id: TrackId, reverse: boolean): BuiltTrack {
 
 export function sampleAt(track: BuiltTrack, dist: number): TrackSample {
   const len = track.length;
-  let d = ((dist % len) + len) % len;
+  const d = ((dist % len) + len) % len;
   const s = track.samples;
   let lo = 0;
   let hi = s.length - 1;

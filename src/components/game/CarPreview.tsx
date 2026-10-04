@@ -25,7 +25,7 @@ export function CarPreview({
     let p: typeof api.current = null;
     (async () => {
       try {
-        const { previewCar } = await import("@/game/engine");
+        const { previewCar } = await import("@/game/previewCar");
         if (dead || !canvasRef.current) return;
         p = previewCar(canvasRef.current, style, paintRef.current);
         api.current = p;
@@ -43,7 +43,6 @@ export function CarPreview({
       api.current = null;
     };
     // paint is applied via setPaint; style rebuilds the mesh
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [style]);
 
   useEffect(() => {
