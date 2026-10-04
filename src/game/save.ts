@@ -1,3 +1,4 @@
+import { readStored, writeStored } from "./storage";
 import { CARS, clonePaint, emptyUpgrades } from "./data/cars";
 import { LEVELS } from "./data/levels";
 import type { CarId, LevelId, SaveData, SettingsSave } from "./types";
@@ -95,9 +96,9 @@ export function migrate(raw: unknown): SaveData {
         Boolean(src.stars?.[2]),
       ];
       out.levels[l.id].bestPlace =
-        typeof src.bestPlace === "number" ? src.bestPlace : null;
-      out.levels[l.id].bestTime = typeof src.bestTime === "number" ? src.bestTime : null;
-      out.levels[l.id].bestLap = typeof src.bestLap === "number" ? src.bestLap : null;
+        typeof src.bestPlace === "number" && Number.isFinite(src.bestPlace) && src.bestPlace >= 1 && src.bestPlace <= 8 ? Math.floor(src.bestPlace) : null;
+      out.levels[l.id].bestTime = typeof src.bestTime === "number" && Number.isFinite(src.bestTime) && src.bestTime > 0 ? src.bestTime : null;
+      out.levels[l.id].bestLap = typeof src.bestLap === "number" && Number.isFinite(src.bestLap) && src.bestLap > 0 ? src.bestLap : null;
       out.levels[l.id].cleared = Boolean(src.cleared);
     }
   }
@@ -138,30 +139,16 @@ export function recountStars(save: SaveData): number {
   return n;
 }
 
-export function loadSave(): SaveData {
-  try {
-    const raw = localStorage.getItem(SAVE_KEY);
-    if (!raw) return defaultSave();
-    return migrate(JSON.parse(raw));
-  } catch {
-    try {
-      const bak = localStorage.getItem(SAVE_KEY + ":bak");
-      if (bak) return migrate(JSON.parse(bak));
-    } catch {
-      /* ignore */
-    }
-    return defaultSave();
-  }
+export function parseSave(text: string): SaveData {
+  const raw: unknown = JSON.parse(text);
+  if (!raw || typeof raw !== "object" || Array.isArray(raw) || !("version" in raw) || typeof raw.version !== "number" || raw.version < 0 || raw.version > SAVE_VERSION) throw new Error("Invalid save version");
+  return migrate(raw);
 }
-
-export function persistSave(save: SaveData): void {
-  try {
-    const prev = localStorage.getItem(SAVE_KEY);
-    if (prev) localStorage.setItem(SAVE_KEY + ":bak", prev);
-    localStorage.setItem(SAVE_KEY, JSON.stringify(save));
-  } catch {
-    /* private mode / quota */
-  }
+export function loadSave(): SaveData {
+  return readStored(SAVE_KEY, SAVE_KEY + ":bak", parseSave) ?? defaultSave();
+}
+export function persistSave(save: SaveData): boolean {
+  return writeStored(SAVE_KEY, SAVE_KEY + ":bak", save, parseSave);
 }
 
 export function clearSave(): void {
@@ -175,7 +162,7 @@ export function clearSave(): void {
 
 export function hasSaveFile(): boolean {
   try {
-    return Boolean(localStorage.getItem(SAVE_KEY));
+    return Boolean(readStored(SAVE_KEY, SAVE_KEY + ":bak", parseSave));
   } catch {
     return false;
   }

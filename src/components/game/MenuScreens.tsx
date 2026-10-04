@@ -1,3 +1,5 @@
+import { SaveTools } from "@/game/save-tools";
+import { parseSave, persistSave } from "@/game/save";
 import { Settings } from "lucide-react";
 import { STORY } from "@/game/data/story";
 import { CAR_MAP } from "@/game/data/cars";
@@ -102,7 +104,7 @@ export function HubScreen() {
             <p className="text-xs tracking-[0.28em] text-muted">目前座車</p>
             <p className="mt-1 font-display text-xl font-semibold">{def.name}</p>
             <p className="truncate text-sm text-muted">
-              {def.tagline}　引擎 Lv.{car.upgrades.engine}　輪胎 Lv.{car.upgrades.tires}
+              {def.tagline} 引擎 Lv.{car.upgrades.engine} 輪胎 Lv.{car.upgrades.tires}
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
               <Btn variant="ghost" onClick={() => go("garage")}>
@@ -249,6 +251,7 @@ export function SettingsScreen() {
         <Btn variant="ghost" onClick={() => go("help")} className="w-full">
           操作說明
         </Btn>
+        <SaveTools value={save} parse={parseSave} filename="neon-circuit-save.json" restore={(next) => { if (!persistSave(next)) return false; useCareer.setState({ save: next, hasFile: true }); return true; }} />
         <Btn variant="danger" onClick={requestWipe} className="w-full">
           清除遊戲進度
         </Btn>

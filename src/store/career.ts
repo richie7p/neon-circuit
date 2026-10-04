@@ -115,8 +115,7 @@ export const useCareer = create<CareerState>((set, get) => ({
   },
 
   persist: () => {
-    persistSave(get().save);
-    set({ hasFile: true });
+    if (persistSave(get().save)) set({ hasFile: true });
   },
 
   go: (s) => set({ prevScreen: get().screen, screen: s }),
@@ -157,10 +156,10 @@ export const useCareer = create<CareerState>((set, get) => ({
 
   newGame: () => {
     const save = defaultSave();
-    persistSave(save);
+    const saved = persistSave(save);
     set({
       save,
-      hasFile: true,
+      hasFile: saved || get().hasFile,
       screen: "intro",
       dialogue: { lines: [], after: "hub" },
       selectedLevel: "l1-harbor",
@@ -213,7 +212,7 @@ export const useCareer = create<CareerState>((set, get) => ({
       breakdown: payout.breakdown,
     };
     const next = applyResult(save, result);
-    persistSave(next);
+    const saved = persistSave(next);
     const level = LEVEL_MAP[partial.levelId];
     const lines = partial.finished
       ? partial.place === 1
@@ -222,7 +221,7 @@ export const useCareer = create<CareerState>((set, get) => ({
       : ["que:沒跑完就回來了？先把車停好。"];
     set({
       save: next,
-      hasFile: true,
+      hasFile: saved || get().hasFile,
       raceResult: result,
       screen: "results",
       dialogue: { lines, after: "hub", title: "賽後" },
@@ -250,8 +249,8 @@ export const useCareer = create<CareerState>((set, get) => ({
     save.cars[id].owned = true;
     save.selectedCar = id;
     unlockLevels(save);
-    persistSave(save);
-    set({ save, hasFile: true, tuneCar: id });
+    const saved = persistSave(save);
+    set({ save, hasFile: saved || get().hasFile, tuneCar: id });
     get().setToast(`已購入 ${def.name}`);
     return true;
   },
@@ -291,9 +290,9 @@ export const useCareer = create<CareerState>((set, get) => ({
     const save = structuredClone(get().save);
     if (!save.cars[id].owned) return;
     save.cars[id].paint = { ...paint };
-    persistSave(save);
+    const saved = persistSave(save);
     set({ save, paintDraft: { ...paint } });
-    get().setToast("外觀已保存");
+    get().setToast(saved ? "外觀已保存" : "外觀已套用，尚未儲存");
   },
 
   setSettings: (p) => {
